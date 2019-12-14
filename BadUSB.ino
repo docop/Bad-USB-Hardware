@@ -1,35 +1,39 @@
 
-#include "Keyboard.h"
-#include "KeyboardFacade.h"
+#include "KeyboardBad.h"
+#include "Bluetooth.h"
 #include "CommandUtils.h"
 #include "CommandMappingPress.h"
 
-#define bluetooth Serial1
-const unsigned int BAUDRATE = 9600;
+unsigned long BAUD_RATE = 115200;
 
 unsigned int numRepeat = 0,
              indexRepeat = 0,
-             indexMain = 0,
-             delayDefault = 10;
+             indexMain = 0;
+
+KeyboardBad *keyboard = new KeyboardBad();
+Bluetooth *bluetooth = new Bluetooth(&BAUD_RATE);
 
 void setup() {
-  Keyboard.begin();
-  Serial.begin(BAUDRATE);
-  bluetooth.begin(BAUDRATE);
+  Serial.begin(BAUD_RATE);
+  
+  keyboard->begin();
+  bluetooth->begin(bluetoothDataReceived);
 }
 
 void loop() {
-  if (bluetooth.available() > 0) {
-    String payload = bluetooth.readStringUntil(0x03);
-    Serial.println(payload);
-    commandPromptParser(payload);
-  }
+  bluetooth->refresh();
 
   if (Serial.available() > 0) {
     String payload = Serial.readStringUntil(0x03);
     Serial.println(payload);
     commandPromptParser(payload);
   }
+}
+
+void bluetoothDataReceived(String payload)
+{
+  Serial.println(payload);
+  commandPromptParser(payload);
 }
 
 bool commandNoResult(String command, String parameter) {
@@ -46,7 +50,7 @@ bool commandNoResult(String command, String parameter) {
 
   if (command.equals("delaydefault")) {
     if (CommandUtils::isNumber(parameter)) {
-      delayDefault = parameter.toInt();
+      keyboard->setDelay(parameter.toInt());
     }
     return true;
   }
@@ -71,7 +75,7 @@ bool commandNoResult(String command, String parameter) {
 
 bool commandWrite(String command, String parameter) {
   if (command == "string") {
-    KeyboardFacade::write(parameter, delayDefault);
+    keyboard->write(parameter);
     return true;
   }
   return false;
@@ -79,14 +83,14 @@ bool commandWrite(String command, String parameter) {
 
 bool commandMappingPress(String command) {
   if (command.length() == 1) {
-    KeyboardFacade::press(command[0]);
+    keyboard->press(command[0]);
     return true;
   }
 
   for (byte i = 0; i < COUNT_KEYS_PRESS; i++) {
     CommandPress commandPress = CommandMappingPress[i];
     if (command.equals(commandPress.Key)) {
-      KeyboardFacade::press(commandPress.Value);
+      keyboard->press(commandPress.Value);
       return true;
     }
   }
@@ -103,7 +107,7 @@ bool commandPress(String command, String parameter) {
         return true;
       }
     }
-    KeyboardFacade::releaseAll(delayDefault);
+    keyboard->releaseAll();
     return true;
   }
   return false;
