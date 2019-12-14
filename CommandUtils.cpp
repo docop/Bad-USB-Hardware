@@ -4,7 +4,7 @@ CommandPrompt CommandUtils::split(String source)
 {
   String command = "";
   String parameter = "";
-  for (unsigned int i = 0, l = source.length() - 1; i <= l; i++)
+  for (byte i = 0, l = source.length() - 1; i <= l; i++)
   {
     const char character = source.charAt(i);
 

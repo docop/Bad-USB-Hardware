@@ -2,14 +2,15 @@
 #include "Keyboard.h"
 #include "KeyboardFacade.h"
 #include "CommandUtils.h"
+#include "CommandMappingPress.h"
 
 #define bluetooth Serial1
 const unsigned int BAUDRATE = 9600;
 
-unsigned int numRepeat = 0;
-unsigned int indexRepeat = 0;
-unsigned int indexMain = 0;
-unsigned int delayDefault = 10;
+unsigned int numRepeat = 0,
+             indexRepeat = 0,
+             indexMain = 0,
+             delayDefault = 10;
 
 void setup() {
   Keyboard.begin();
@@ -28,7 +29,6 @@ void loop() {
     String payload = Serial.readStringUntil(0x03);
     Serial.println(payload);
     commandPromptParser(payload);
-    //    bluetooth.println(payload);
   }
 }
 
@@ -83,34 +83,12 @@ bool commandMappingPress(String command) {
     return true;
   }
 
-  if (command.equals("gui")) {
-    KeyboardFacade::press(KEY_LEFT_GUI);
-    return true;
-  }
-
-  if (command.equals("shift")) {
-    KeyboardFacade::press(KEY_LEFT_SHIFT);
-    return true;
-  }
-
-  if (command.equals("ctrl")) {
-    KeyboardFacade::press(KEY_LEFT_CTRL);
-    return true;
-  }
-
-  if (command.equals("alt")) {
-    KeyboardFacade::press(KEY_LEFT_ALT);
-    return true;
-  }
-
-  if (command.equals("del")) {
-    KeyboardFacade::press(KEY_DELETE);
-    return true;
-  }
-
-  if (command.equals("enter")) {
-    KeyboardFacade::press(KEY_RETURN);
-    return true;
+  for (byte i = 0; i < COUNT_KEYS_PRESS; i++) {
+    CommandPress commandPress = CommandMappingPress[i];
+    if (command.equals(commandPress.Key)) {
+      KeyboardFacade::press(commandPress.Value);
+      return true;
+    }
   }
 
   return false;

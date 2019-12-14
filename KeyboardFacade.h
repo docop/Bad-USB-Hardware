@@ -8,7 +8,7 @@ class KeyboardFacade
 
     static void write(String command, unsigned int delayDefault);
 
-    static void press(unsigned int command);
+    static void press(byte command);
 
     static void releaseAll(unsigned int delay);
 };

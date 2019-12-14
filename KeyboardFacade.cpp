@@ -8,13 +8,13 @@ void KeyboardFacade::write(String command)
 
 void KeyboardFacade::write(String command, unsigned int delayDefault)
 {
-  for (unsigned int i = 0; i < command.length(); i++) {
+  for (byte i = 0, l = command.length(); i < l; i++) {
     Keyboard.write(command.charAt(i));
   }
   releaseAll(delayDefault);
 }
 
-void KeyboardFacade::press(unsigned int command)
+void KeyboardFacade::press(byte command)
 {
   Keyboard.press(command);
 }
