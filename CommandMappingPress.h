@@ -1,3 +1,5 @@
+#pragma once
+
 const unsigned int COUNT_KEYS_PRESS = 6;
 
 struct CommandPress {
