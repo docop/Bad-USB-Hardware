@@ -1,5 +1,5 @@
 #include "CommandInterpreter.h"
-#include "CommandMappingPress.h"
+#include "PressKeyboardMapping.h"
 
 CommandInterpreter::CommandInterpreter(KeyboardBad *keyboard) {
   this->keyboard = keyboard;
@@ -101,9 +101,9 @@ bool CommandInterpreter::mappingPress(String command) {
   }
 
   for (byte i = 0; i < COUNT_KEYS_PRESS; i++) {
-    CommandPress commandPress = CommandMappingPress[i];
-    if (command.equals(commandPress.Key)) {
-      this->keyboard->press(commandPress.Value);
+    PressKeyboard pressKeyboard = PressKeyboardMapping[i];
+    if (command.equals(pressKeyboard.Key)) {
+      this->keyboard->press(pressKeyboard.Value);
       return true;
     }
   }
