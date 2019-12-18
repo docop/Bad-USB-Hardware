@@ -7,7 +7,7 @@ A device pretending to be an HID interface. Works like a keyboard and lets you e
 
 ATmega32u4 + Bluetooth HC-05 components were used to build the device.
 
-![Sketch](https://raw.github.com/mserafin/Bad-USB-Hardware/master/sketch.png)
+![Sketch](https://raw.github.com/mserafin/Bad-USB-Hardware/master/sketch.png){ width=50% }
 
 > I don't take any responsibility for what you do with this project.
 
