@@ -129,8 +129,7 @@ bool CommandInterpreter::pressKeyboard(String command, String parameter) {
 
 CommandPrompt CommandInterpreter::split(String source)
 {
-  String command = "";
-  String parameter = "";
+  CommandPrompt result;
 
   for (byte i = 0, l = source.length() - 1; i <= l; i++)
   {
@@ -138,23 +137,23 @@ CommandPrompt CommandInterpreter::split(String source)
 
     if (isSpace(_char))
     {
-      command.toLowerCase();
-      command.trim();
+      result.command.trim();
+      result.command.toLowerCase();
+      
+      result.parameter = source.substring(i);
+      result.parameter.trim();
 
-      parameter = source.substring(i);
-      parameter.trim();
-
-      return {command, parameter};
+      return result;
     }
 
-    command += _char;
+    result.command += _char;
 
     if (i == l)
     {
-      command.trim();
-      command.toLowerCase();
-
-      return {command, ""};
+      result.command.trim();
+      result.command.toLowerCase();
+      
+      return result;
     }
   }
 }
