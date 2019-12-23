@@ -16,7 +16,7 @@ void CommandInterpreter::processing(void)
 
   this->repeat = {0, 0};
   this->iterator = {0, source.length(), false };
-  
+
   for (; this->iterator.index < this->iterator.length; this->iterator.index++)
   {
     const char _char = source.charAt(this->iterator.index);
@@ -29,7 +29,7 @@ void CommandInterpreter::processing(void)
       commandPrompt.trim();
 
       if (commandPrompt.length() > 0) {
-        CommandPrompt prompt = this->split(commandPrompt);
+        CommandPrompt prompt = this->getCommandPrompt(commandPrompt);
 
         this->notPressKeyboard(prompt.command, prompt.parameter)
         || this->writeKeyboard(prompt.command, prompt.parameter)
@@ -53,16 +53,12 @@ bool CommandInterpreter::notPressKeyboard(String command, String parameter) {
   }
 
   if (command.equals("delay")) {
-    if (this->isNumber(parameter)) {
-      delay(parameter.toInt());
-    }
+    delay(this->isNumber(parameter) ? parameter.toInt() : DELAY_DEFAULT);
     return true;
   }
 
   if (command.equals("delaydefault")) {
-    if (this->isNumber(parameter)) {
-      this->keyboard->setDelay(parameter.toInt());
-    }
+    this->keyboard->setDelay(this->isNumber(parameter) ? parameter.toInt() : DELAY_DEFAULT);
     return true;
   }
 
@@ -114,7 +110,7 @@ bool CommandInterpreter::mappingPress(String command) {
 bool CommandInterpreter::pressKeyboard(String command, String parameter) {
   if (this->mappingPress(command)) {
     if (parameter.length() > 0) {
-      CommandPrompt prompt = this->split(parameter);
+      CommandPrompt prompt = this->getCommandPrompt(parameter);
       if (prompt.command.length() > 0) {
         this->pressKeyboard(prompt.command, prompt.parameter);
         return true;
@@ -127,10 +123,9 @@ bool CommandInterpreter::pressKeyboard(String command, String parameter) {
   return false;
 }
 
-CommandPrompt CommandInterpreter::split(String source)
+CommandPrompt CommandInterpreter::getCommandPrompt(String source)
 {
   CommandPrompt result;
-
   for (byte i = 0, l = source.length() - 1; i <= l; i++)
   {
     const char _char = source.charAt(i);
@@ -139,7 +134,7 @@ CommandPrompt CommandInterpreter::split(String source)
     {
       result.command.trim();
       result.command.toLowerCase();
-      
+
       result.parameter = source.substring(i);
       result.parameter.trim();
 
@@ -152,10 +147,9 @@ CommandPrompt CommandInterpreter::split(String source)
     {
       result.command.trim();
       result.command.toLowerCase();
-      
-      return result;
     }
   }
+  return result;
 }
 
 bool CommandInterpreter::isNumber(String source) {

@@ -2,6 +2,7 @@
 
 void KeyboardBad::begin(void) {
   Keyboard.begin();
+  this->delayDefault = DELAY_DEFAULT;
 }
 
 void KeyboardBad::write(String command)
@@ -20,9 +21,9 @@ void KeyboardBad::press(byte command)
 void KeyboardBad::releaseAll()
 {
   Keyboard.releaseAll();
-  delay(DELAY_DEFAULT);
+  delay(this->delayDefault);
 }
 
 void KeyboardBad::setDelay(unsigned int value) {
-  DELAY_DEFAULT = value;
+  this->delayDefault = value;
 }

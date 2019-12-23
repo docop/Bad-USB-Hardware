@@ -35,6 +35,6 @@ class CommandInterpreter
     bool writeKeyboard(String command, String parameter);
     bool mappingPress(String command);
 
-    CommandPrompt split(String source);
+    CommandPrompt getCommandPrompt(String source);
     bool isNumber (String source);
 };

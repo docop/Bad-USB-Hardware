@@ -20,7 +20,7 @@ ATmega32u4 + Bluetooth HC-05 components were used to build the device.
 |--------------|-------------------------------|--------------------------
 | rem          | `<REM My First Payload>`      | Comment.
 | string       | `<STRING notepad.exe>`        | Processes the text.
-| delay        | `<DELAY 100>`                 | Creates a momentary pause.
+| delay        | `<DELAY 100>`                 | Creates a momentary pause. The default is 10 milliseconds.
 | delaydefault | `<DELAYDEFAULT 100>`          | Used to change the pause between commands. The default is 10 milliseconds.
 | repeat       | `<REPEAT 5>`                  | Repeats commands between `REPEAT` and` REPEATEND` n times. Default 1 times.
 | repeatend    | `<REPEATEND>`                 | --//--
